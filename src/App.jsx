@@ -1,10 +1,15 @@
 // import necessary hooks from React
 import { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
 
 // import our Movie component
-import Movie from './Movie';
+import Movie from './pages/Movie';
+
+// import the nav bar
+import Nav from './components/navbar';
 
 export default function App() {
 
@@ -22,20 +27,16 @@ export default function App() {
   }, []);
 
 
-  // Create a state variable called greeting
-  const [greeting, setGreeting] = useState('Hello world!');
-
-  return <div className="App">
-    <h1>{greeting}</h1>
-    {greeting === 'Hello world!' && <Button variant="danger"
-      onClick={() => setGreeting('Goodbye cruel world!')}
-    >Say goodbye</Button>}
-    {/* Loop through all movies and display each movie */}
-    {movies.map(({ id, title, description }) => <Movie
-      key={id}
-      title={title}
-      description={description}
-    />)}
-  </div>;
-
+  return (
+    <Container fluid className="p-0">
+      <Nav />
+      <Row md={2} lg={3} xl={4} className="mt-4">
+        {movies.map(({ id, title, description }) => (
+          <Col key={id} className="mb-4">
+            <Movie title={title} description={description} />
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  );
 }

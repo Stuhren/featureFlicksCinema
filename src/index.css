@@ -6,4 +6,25 @@
 
 .movie img {
   width: 200px;
+  height: 400px;
+}
+
+.brand {
+  font-size: 30px;
+  color: rgb(221, 221, 29);
+  font-family: 'Audiowide';
+}
+
+.me-auto {
+  font-size: 18px;
+  color: white;
+  font-family: 'Lucida Sans'
+}
+
+.movies {
+  margin-top: 20px;
+}
+
+.p-0{
+  overflow-x: hidden;
 }
