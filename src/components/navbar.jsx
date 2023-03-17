@@ -2,22 +2,24 @@ import React from "react";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { Outlet, Link } from "react-router-dom";
 
-function ColorSchemesExample() {
+
+function NavbarComponent() {
     return (
         <>
-            <Navbar className="navbar" bg="dark" variant="dark">
-                <Container>
-                    <Navbar.Brand href="#home" className="brand">Feature Flicks</Navbar.Brand>
+            <Navbar className="navbar" bg="warning" variant="primary">
+                <Container className="navbarContainer">
+                    <Navbar.Brand className="brand">Feature Flicks</Navbar.Brand>
                     <Nav className="me-auto">
-                        <Nav.Link href="#home">Home</Nav.Link>
-                        <Nav.Link href="#movies">Movies</Nav.Link>
-                        <Nav.Link href="#screenings">Screenings</Nav.Link>
+                        <Link className="nav-link" Link to="/home">Home</Link>
+                        <Link className="nav-link" Link to="/screenings">Screenings</Link>
                     </Nav>
                 </Container>
             </Navbar>
+            <Outlet />
         </>
     );
 }
 
-export default ColorSchemesExample;
+export default NavbarComponent;

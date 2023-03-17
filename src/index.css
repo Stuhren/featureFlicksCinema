@@ -11,20 +11,42 @@
 
 .brand {
   font-size: 30px;
-  color: rgb(221, 221, 29);
+  color: black;
   font-family: 'Audiowide';
 }
 
 .me-auto {
   font-size: 18px;
   color: white;
-  font-family: 'Lucida Sans'
+  font-family: 'Lucida Sans';
+  margin-top: 5px;
 }
 
 .movies {
   margin-top: 20px;
 }
 
-.p-0{
+.movieContainer{
   overflow-x: hidden;
+  background-color: rgb(24, 24, 24);
+}
+
+.navbarContainer {
+  margin-left: 80px;
+}
+
+.cardLayout {
+  margin: auto;
+  margin-bottom: 6;
+}
+
+.card:hover{
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgb(255,204,0), 0 4px 8px rgba(255,204,0);
+}
+
+.card{
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08), 0 0 6px rgba(0,0,0,.05);
+    transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+  cursor: pointer;
 }
