@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
-import Screenings from "./pages/NoPage";
+import Screenings from "./pages/Screenings";
 
 
 export default function App() {

@@ -1,4 +1,4 @@
-import Movie from '../pages/Movie';
+import Movie from '../components/Movie';
 import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Row from 'react-bootstrap/Row';
