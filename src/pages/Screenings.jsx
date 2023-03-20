@@ -19,7 +19,7 @@ const Screenings = () => {
       const moviesInfo = await moviesData.json();
       const screeningComplete = screeningsInfo.map(screening => {
           const movie = moviesInfo.find(movie => movie.id === screening.movieId);
-          return { ...screening, title: movie.title };
+          return { ...screening, title: movie.title, description: movie.description, };
       });
       setScreenings(screeningComplete);
     })();
@@ -48,9 +48,9 @@ const Screenings = () => {
             <h2 className="headlineDate">{date}</h2>
             <hr className="headlineLine" />
             <Row md={2} lg={3} xxl={4} className="mt-4">
-            {screeningsForDate.map(({ id, title, time, auditoriumId }, index) => (
+            {screeningsForDate.map(({ id, title, time, auditoriumId, description }, index) => (
               <Col key={index} className="mb-4">
-                <Screening id={id} title={title} time={time} auditoriumId={auditoriumId} />
+                <Screening id={id} title={title} time={time} auditoriumId={auditoriumId} description={description} />
               </Col>
             ))}
             </Row>
