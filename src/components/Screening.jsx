@@ -16,7 +16,7 @@ export default function Screening(props) {
       <Card className="cardLayout" border="dark" style={{ width: '18rem' }}>
         <Card.Body className="text-center">
           <Card.Title>{title}</Card.Title>
-          <Card.Text>{time}</Card.Text>
+          <Card.Text>{new Date(time).toLocaleString()}</Card.Text>
           <Card.Text>{auditoriumId}</Card.Text>
           <Button variant="outline-dark">Book Seats</Button>
         </Card.Body>

@@ -26,7 +26,7 @@ return (
     <Row md={2} lg={3} xxl={4} className="mt-4">
       {movies.map(({ id, title, description }) => (
         <Col key={id} className="mb-4">
-          <Movie title={title} description={description} />
+          <Movie title={title} description={description} id={id} />
         </Col>
       ))}
     </Row>

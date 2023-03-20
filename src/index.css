@@ -13,6 +13,7 @@
   font-size: 30px;
   color: black;
   font-family: 'Audiowide';
+  font-style:italic;
 }
 
 .me-auto {
@@ -49,4 +50,37 @@
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08), 0 0 6px rgba(0,0,0,.05);
     transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
   cursor: pointer;
+}
+
+.headlineDate{
+  color: rgb(255,204,0);
+  text-align: center;
+  margin-bottom: -10px;
+  margin-top: 20px;
+}
+
+.headlineLine{
+  color: rgb(255,204,0);
+}
+
+.nav-link:hover{
+  transform: scale(1.10);
+}
+
+.nav-link{
+  font-weight: bold;
+}
+
+.movieDetails {
+  background-color:rgb(24, 24, 24);
+}
+
+.movieTitle {
+  color: rgb(255,204,0);
+  font-size: 30px;
+}
+
+.detailsDate {
+  font-size: 24px;
+  color: rgb(255,204,0);
 }
