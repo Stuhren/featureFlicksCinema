@@ -4,10 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
-
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 const Screenings = () => {
   const [screenings, setScreenings] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -22,12 +25,20 @@ const Screenings = () => {
           return { ...screening, title: movie.title, description: movie.description, };
       });
       setScreenings(screeningComplete);
+      const uniqueCategories = [...new Set(moviesInfo.flatMap(movie => movie.description.categories))];
+      setCategories(uniqueCategories);
     })();
   }, []);
 
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filteredScreenings = selectedCategory ? screenings.filter(screening => screening.description.categories.includes(selectedCategory)) : screenings;
+
   // Group the screenings by date and get weekday
   const screeningsByDate = {};
-  screenings.forEach(screening => {
+  filteredScreenings.forEach(screening => {
     const dateObj = new Date(screening.time);
     const date = dateObj.toLocaleDateString();
     const weekday = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
@@ -36,13 +47,28 @@ const Screenings = () => {
       screeningsByDate[dateWithWeekday] = [];
     }
     screeningsByDate[dateWithWeekday].push(screening);
-});
-
-
+  });
 
   return (
     <div>
       <Container fluid className="movieContainer">
+        <Row className="justify-content-center">
+          <Col>
+            <DropdownButton
+              id="category-dropdown"
+              className="dropdownButton"
+              title={selectedCategory || 'Select Category'}
+              onSelect={handleCategorySelect}
+              variant="warning"
+            >
+              <Dropdown.Item eventKey="">All Categories</Dropdown.Item>
+              <hr className="headlineCategory" />
+              {categories.map((category, index) => (
+                <Dropdown.Item key={index} eventKey={category}>{category}</Dropdown.Item>
+              ))}
+            </DropdownButton>
+          </Col>
+        </Row>
         {Object.entries(screeningsByDate).map(([date, screeningsForDate]) => (
           <div key={date}>
             <h2 className="headlineDate">{date}</h2>

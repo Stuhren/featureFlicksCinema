@@ -85,7 +85,7 @@ export default function DisplaySeats() {
   // Render seating chart here
   return (s.seats.length === 0 ? null : <div className="screening-and-seats">
     <h1>{s.screening.movie}</h1>
-    <h2>{new Intl.DateTimeFormat('sv-SE', {
+    <h2>{new Intl.DateTimeFormat('eng-SE', {
       weekday: "long",
       year: "numeric",
       month: "long",
