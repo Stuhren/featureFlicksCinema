@@ -1,10 +1,11 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { Link } from 'react-router-dom';
 
 export default function Screening(props) {
 
   // Destructure props into separate variables
-  let { time, title, auditoriumId } = props;
+  let { id, time, title, auditoriumId } = props;
 
   if (auditoriumId === 1) {
     auditoriumId = "Stora Salongen"
@@ -13,13 +14,13 @@ export default function Screening(props) {
   }
 
   return (
-      <Card className="cardLayout" border="dark" style={{ width: '18rem' }}>
-        <Card.Body className="text-center">
-          <Card.Title>{title}</Card.Title>
-          <Card.Text>{new Date(time).toLocaleString()}</Card.Text>
-          <Card.Text>{auditoriumId}</Card.Text>
-          <Button variant="outline-dark">Book Seats</Button>
-        </Card.Body>
-      </Card>
+    <Card className="cardLayout" border="dark" style={{ width: '18rem' }}>
+      <Card.Body className="text-center">
+        <Card.Title>{title}</Card.Title>
+        <Card.Text>{new Date(time).toLocaleString()}</Card.Text>
+        <Card.Text>{auditoriumId}</Card.Text>
+        <Button variant="outline-dark" as={Link} to={`/booking/${id}`}>Book Seats</Button>
+      </Card.Body>
+    </Card>
   );
 }

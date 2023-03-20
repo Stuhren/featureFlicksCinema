@@ -34,7 +34,7 @@ export default function MovieDetails() {
   }
 
   let { title, description } = movie;
-  let { posterImage } = description;
+  let { posterImage, length } = description;
   posterImage = 'https://cinema-rest.nodehill.se/' + posterImage;
 
   // Group the screenings by date and get weekday
@@ -52,6 +52,11 @@ export default function MovieDetails() {
 
   const dates = Object.keys(screeningsByDate);
 
+  // Get the hours and minutes parts of the movie length
+  const hours = Math.floor(length / 60);
+  const minutes = length % 60;
+
+
   return (
     <Container fluid className="movieDetails" key={id}>
       <div>
@@ -59,15 +64,17 @@ export default function MovieDetails() {
         <hr className="headlineLine" />
         <p className="movieTitle">Title: {title}</p>
         <hr className="headlineLine" />
-        <p className="movieTitle">Future Screenings</p>
+        <p className="movieTitle">Movie Length: {hours}h {minutes}min</p>
+        <hr className="headlineLine" />
+        <p className="movieTitle">Future Screenings:</p>
         <Row>
           {dates.map(date => (
-            <Col key={date} className="mb-4 col-xxl-6">
-              <h3 className="detailsDate text-align-center">{date}</h3>
-              <Row className="justify-content-center">
+            <Col key={date} className="mb-4">
+              <h3 className="detailsDate">{date}</h3>
+              <Row>
                 {screeningsByDate[date].map(({ id, time, auditoriumId, title }) => (
                   <Col key={id} className="mb-4">
-                    <Screening title={title} time={new Date(time).toLocaleString()} auditoriumId={auditoriumId} />
+                    <Screening id={id} title={title} time={new Date(time).toLocaleString()} auditoriumId={auditoriumId} />
                   </Col>
                 ))}
               </Row>

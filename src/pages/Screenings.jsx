@@ -39,6 +39,7 @@ const Screenings = () => {
 });
 
 
+
   return (
     <div>
       <Container fluid className="movieContainer">
@@ -47,11 +48,11 @@ const Screenings = () => {
             <h2 className="headlineDate">{date}</h2>
             <hr className="headlineLine" />
             <Row md={2} lg={3} xxl={4} className="mt-4">
-              {screeningsForDate.map(({ movieId, title, time, auditoriumId }, index) => (
-                <Col key={index} className="mb-4">
-                  <Screening title={title} time={time} auditoriumId={auditoriumId} />
-                </Col>
-              ))}
+            {screeningsForDate.map(({ id, title, time, auditoriumId }, index) => (
+              <Col key={index} className="mb-4">
+                <Screening id={id} title={title} time={time} auditoriumId={auditoriumId} />
+              </Col>
+            ))}
             </Row>
           </div>
         ))}

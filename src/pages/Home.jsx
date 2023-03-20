@@ -24,9 +24,9 @@ return (
     <div>
   <Container fluid className="movieContainer">
     <Row md={2} lg={3} xxl={4} className="mt-4">
-      {movies.map(({ id, title, description }) => (
+      {movies.map(({ id, title, description, category, length }) => (
         <Col key={id} className="mb-4">
-          <Movie title={title} description={description} id={id} />
+          <Movie title={title} description={description} id={id} category={category} length={length} />
         </Col>
       ))}
     </Row>
