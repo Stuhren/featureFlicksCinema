@@ -7,6 +7,7 @@ import NoPage from "./pages/NoPage";
 import Screenings from "./pages/Screenings";
 import MovieDetails from "./pages/MovieDetails";
 import DisplaySeats from "./pages/DisplaySeats";
+import Receipt from "./pages/Receipt"
 
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
       <Route path="home" element={<Home />} />
       <Route path="movies/:id" element={<MovieDetails />} />
       <Route path="booking/:screeningId" element={<DisplaySeats />} />
+      <Route path="receipt" element={<Receipt />} />
       <Route path="*" element={<NoPage />} />
       </Route>
    </Routes>
