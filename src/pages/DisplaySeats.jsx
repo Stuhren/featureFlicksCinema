@@ -1,9 +1,9 @@
-import { useEffect, React } from 'react';
+import { useEffect, React, useState } from 'react';
 import { useStates } from '../utilities/states';
 import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import Receipt from './Receipt'
-import { Link } from 'react-router-dom';
+import { Card } from 'react-bootstrap';
+import { GenerateBookingNumber } from '../components/GenerateBookingNumber';
 
 const DisplaySeats = () => {
   const s = useStates({
@@ -11,7 +11,12 @@ const DisplaySeats = () => {
     movie: null,
     seats: [],
   });
+  const [selectedSeats, setSelectedSeats] = useState([]);
+
   const { screeningId } = useParams();
+  const [a,b] = useState(false)
+  let bookingNumber = GenerateBookingNumber();
+  
 
   useEffect(() => {
     (async () => {
@@ -76,49 +81,45 @@ const DisplaySeats = () => {
   function toggleSeatSelection(seat) {
     // do nothing if occupied
     if (seat.occupied) return;
-
+  
     // toggle selected state
     seat.selected = !seat.selected;
-
+  
     // update state variable
     s.seats = [...s.seats];
+  
+    // update selectedSeats array
+    setSelectedSeats((prevSelectedSeats) => {
+      if (prevSelectedSeats.includes(seat)) {
+        return prevSelectedSeats.filter((s) => s !== seat);
+      } else {
+        return [...prevSelectedSeats, seat];
+      }
+    });
   }
 
   function handleCompleteOrder() {
-    const selectedSeats = s.seats
-      .flat()
-      .filter((seat) => seat.selected)
-      .map((seat) => seat.seatNumber);
-    const title = s.screening.movie;
-    
-    if (selectedSeats.length === 0) {
-      alert("Please select at least one seat");
-      return;
-    }
-    
-    return (
-      <>
-        <Receipt seats={selectedSeats} title={title} />
-        <p>Booking ID: 123123</p>
-      </>
-    );
+    b(true)
   }
 
+ 
+
   // Render seating chart here
-  return (
-    s.seats.length === 0 ? null : (
+  
+    return !a ?(s.seats.length === 0 ? null : (
       <div className="screening-and-seats">
         <h1>{s.screening.movie}</h1>
         <h2>
           {new Intl.DateTimeFormat('eng-SE', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-          }).format(new Date(s.screening.screeningTime))}
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  }).format(new Date(s.screening.screeningTime))}
         </h2>
+        <h2>{s.screening.auditorium}</h2>
         <hr className="headlineLine" />
         <img
           className="poster-screen"
@@ -146,17 +147,37 @@ const DisplaySeats = () => {
           ))}
         </div>
         <hr className="headlineLine" />
+        <h2>Choose Ticket Types</h2>
+        <hr className="headlineLine" />
         <Button
           onClick= {handleCompleteOrder}
           variant="outline-warning"
-          as={Link}
-          to={`/receipt`}
         >
           Complete Order
         </Button>
-      </div>
-    )
-  );
-}
+      </div>)):(
+        <div className="receiptPage">
+        <h2 className='receiptText'>Thank you for booking your experience with us at Feature Flicks!</h2>
+        <h2 className='receiptText'>Here is your receipt:</h2>
+        <hr className="headlineLine pb-2" />
+        <Card className="cardLayout" border="dark" style={{ width: '30rem', textAlign:"left"}}>
+        <Card.Body className="text-align-left">
+        <Card.Title>Booking ID: {bookingNumber}</Card.Title>
+        <Card.Title>Movie: {s.movie.title}</Card.Title>
+        <Card.Title>Date&Time: {new Intl.DateTimeFormat('eng-SE', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  }).format(new Date(s.screening.screeningTime))}</Card.Title>
+        <Card.Title>Auditorium: {s.screening.auditorium}</Card.Title>
+        <Card.Title>Seats: {selectedSeats.map(seat => `Seat ${seat.seatNumber}, Row ${seat.rowNumber}`).join(" | ")}</Card.Title>
+        <Card.Title>Ticket Types: tjabbatjena</Card.Title>
+        <Card.Title>Total: tjabbatjena</Card.Title>
+        </Card.Body>
+        </Card>
+        </div>)}
 
 export default DisplaySeats;

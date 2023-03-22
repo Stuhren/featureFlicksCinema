@@ -156,3 +156,14 @@
 .dropdownButton{
   font-size: 30px;
 }
+
+.receiptPage {
+  background-color: rgb(24, 24, 24);
+  min-height: 100vh;
+  text-align: center;
+}
+
+.receiptText {
+  color: rgb(255,204,0);
+  padding-top: 20px;
+}
