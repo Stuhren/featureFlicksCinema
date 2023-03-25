@@ -11,6 +11,7 @@ export default function MovieDetails() {
   const [screenings, setScreenings] = useState([]);
   const { id } = useParams();
 
+
   useEffect(() => {
     (async () => {
       const [movieData, screeningsData] = await Promise.all([
@@ -29,9 +30,11 @@ export default function MovieDetails() {
     })();
   }, [id]);
 
+
   if (!movie) {
     return <div>Loading...</div>;
   }
+
 
   let { title, description } = movie;
   let { posterImage, length, categories } = description;
@@ -50,7 +53,9 @@ export default function MovieDetails() {
     screeningsByDate[dateWithWeekday].push(screening);
   });
 
+
   const dates = Object.keys(screeningsByDate);
+
 
   // Get the hours and minutes parts of the movie length
   const hours = Math.floor(length / 60);

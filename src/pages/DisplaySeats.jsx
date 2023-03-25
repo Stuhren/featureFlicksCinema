@@ -24,10 +24,10 @@ const DisplaySeats = () => {
 
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-
   const { screeningId } = useParams();
   const [receiptNotReady,receiptReady] = useState(false)
   let bookingNumber = GenerateBookingNumber();
+
 
   function ticketTypeLength() {
     if (selectedSeats.length == 0) {
@@ -123,6 +123,7 @@ const DisplaySeats = () => {
     })();
   }, [screeningId]);
 
+
   function toggleSeatSelection(seat) {
     // do nothing if occupied
     if (seat.occupied) return;
@@ -147,6 +148,7 @@ const DisplaySeats = () => {
     });
   }
 
+
   function handleCompleteOrder() {
     var ticketsSelected = parseInt(selectedAdultValue) + parseInt(selectedChildValue) + parseInt(selectedSeniorValue)
     if (selectedSeats.length === ticketsSelected) {
@@ -169,7 +171,6 @@ const DisplaySeats = () => {
       setTotalPrice(newTotalPrice);
     };
   
-
     const dropdownOptions = [];
     for (let i = 1; i <= ticketTypeLength(); i++) {
       dropdownOptions.push(
@@ -232,6 +233,7 @@ const DisplaySeats = () => {
     );
   }
 
+
   function ChildDropdownButton() {
   
     const handleChildSelect = (childEventKey) => {
@@ -243,9 +245,7 @@ const DisplaySeats = () => {
       setSelectedChildValue(childEventKey);
       setTotalPrice(newTotalPrice);
     };
-    
-
-
+  
     const dropdownOptions = [];
     for (let i = 1; i <= ticketTypeLength(); i++) {
       dropdownOptions.push(
@@ -270,6 +270,7 @@ const DisplaySeats = () => {
       </div>
     );
   }
+
 
   // Render seating chart here
   
@@ -359,5 +360,6 @@ const DisplaySeats = () => {
         </Card.Body>
         </Card>
         </div>)}
+
 
 export default DisplaySeats;

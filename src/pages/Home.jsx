@@ -12,6 +12,7 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
 
+
   useEffect(() => {
     (async () => {
       const response = await fetch('/api/movies');
@@ -21,6 +22,7 @@ const Home = () => {
       setCategories(uniqueCategories);
     })();
   }, []);
+
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);

@@ -12,6 +12,7 @@ const Screenings = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
 
+
   useEffect(() => {
     (async () => {
       const [screeningsData, moviesData] = await Promise.all([
@@ -36,6 +37,7 @@ const Screenings = () => {
 
   const filteredScreenings = selectedCategory ? screenings.filter(screening => screening.description.categories.includes(selectedCategory)) : screenings;
 
+
   // Group the screenings by date and get weekday
   const screeningsByDate = {};
   filteredScreenings.forEach(screening => {
@@ -48,6 +50,7 @@ const Screenings = () => {
     }
     screeningsByDate[dateWithWeekday].push(screening);
   });
+
 
   return (
     <div>
@@ -86,5 +89,6 @@ const Screenings = () => {
     </div>
   );
 };
+
 
 export default Screenings;
