@@ -106,7 +106,7 @@
   text-align: center;
   background-color:rgb(24, 24, 24);
   color: rgb(255,204,0);
-  min-height: 100vh;
+  min-height: 110vh;
 }
 
 .seats {
@@ -166,4 +166,10 @@
 .receiptText {
   color: rgb(255,204,0);
   padding-top: 20px;
+}
+
+.ticket-dropdowns {
+  display: flex;
+  justify-content:space-evenly;
+  padding-top: 10px;
 }

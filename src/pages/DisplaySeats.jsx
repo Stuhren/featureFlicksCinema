@@ -4,18 +4,46 @@ import { useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { Card } from 'react-bootstrap';
 import { GenerateBookingNumber } from '../components/GenerateBookingNumber';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 
 const DisplaySeats = () => {
+  const [ticketTypes, setTicketTypes] = useState([]);
+  const [childTicket, setChildTicket] = useState([]);
+  const [adultTicket, setAdultTicket] = useState([]);
+  const [seniorTicket, setSeniorTicket] = useState([]);
+  const [selectedAdultValue, setSelectedAdultValue] = useState(0);
+  const [selectedSeniorValue, setSelectedSeniorValue] = useState(0);
+  const [selectedChildValue, setSelectedChildValue] = useState(0);
+
+
   const s = useStates({
     screening: null,
     movie: null,
     seats: [],
   });
+
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const { screeningId } = useParams();
-  const [a,b] = useState(false)
+  const [receiptNotReady,receiptReady] = useState(false)
   let bookingNumber = GenerateBookingNumber();
+
+  function ticketTypeLength() {
+    if (selectedSeats.length == 0) {
+      return 1
+    } else {
+      return selectedSeats.length
+    }
+  }
+
+
+  const dropdownOptions = [];
+  for (let i = 1; i <= ticketTypeLength; i++) {
+    dropdownOptions.push(
+      <Dropdown.Item key={i} eventKey={i.toString()}>{i}</Dropdown.Item>
+    );
+  }
   
 
   useEffect(() => {
@@ -42,11 +70,28 @@ const DisplaySeats = () => {
         ).json()
       )[0];
 
+      const ticketTypes = await (
+        await fetch('/api/ticketTypes')
+      ).json();
+      setTicketTypes(ticketTypes);
+      
+      // Add the price for each ticket type
+      ticketTypes.forEach((ticketType) => {
+        if (ticketType.id === 1) {
+          setChildTicket(ticketType.price)
+        } else if (ticketType.id === 2) {
+          setSeniorTicket(ticketType.price)
+        } else if (ticketType.id === 3) {
+          setAdultTicket(ticketType.price)
+        }
+      });
+
       // Get the auditorium id from the auditorium name
       let auditoriumId =
         ['Stora Salongen', 'Lilla Salongen'].indexOf(
           s.screening.auditorium
         ) + 1;
+
 
       // Get the seats
       let seats = await (
@@ -83,15 +128,19 @@ const DisplaySeats = () => {
     if (seat.occupied) return;
   
     // toggle selected state
-    seat.selected = !seat.selected;
+    const newSeats = s.seats.map((row) =>
+      row.map((s) =>
+        s.seatNumber === seat.seatNumber ? { ...s, selected: !s.selected } : s
+      )
+    );
   
     // update state variable
-    s.seats = [...s.seats];
+    s.seats = newSeats;
   
     // update selectedSeats array
     setSelectedSeats((prevSelectedSeats) => {
-      if (prevSelectedSeats.includes(seat)) {
-        return prevSelectedSeats.filter((s) => s !== seat);
+      if (prevSelectedSeats.some((s) => s.seatNumber === seat.seatNumber)) {
+        return prevSelectedSeats.filter((s) => s.seatNumber !== seat.seatNumber);
       } else {
         return [...prevSelectedSeats, seat];
       }
@@ -99,14 +148,132 @@ const DisplaySeats = () => {
   }
 
   function handleCompleteOrder() {
-    b(true)
+    var ticketsSelected = parseInt(selectedAdultValue) + parseInt(selectedChildValue) + parseInt(selectedSeniorValue)
+    if (selectedSeats.length === ticketsSelected) {
+      receiptReady(true)
+    } else {
+      alert("Please make sure that the selected seats amount and the ticket types amount corresponds with each other.")
+    }
   }
 
- 
+
+  function AdultDropdownButton() {
+  
+    const handleAdultSelect = (adultEventKey) => {
+      const adultTicketCount = parseInt(adultEventKey, 10);
+      const prevAdultTicketCount = parseInt(selectedAdultValue, 10) || 0;
+      const prevAdultContribution = adultTicket * prevAdultTicketCount;
+      const newAdultContribution = adultTicket * adultTicketCount;
+      const newTotalPrice = totalPrice - prevAdultContribution + newAdultContribution;
+      setSelectedAdultValue(adultEventKey);
+      setTotalPrice(newTotalPrice);
+    };
+  
+
+    const dropdownOptions = [];
+    for (let i = 1; i <= ticketTypeLength(); i++) {
+      dropdownOptions.push(
+        <Dropdown.Item key={i} eventKey={i.toString()}>
+          {i}
+        </Dropdown.Item>
+      );
+    }
+  
+    return (
+      <div>
+        <h4>Adults</h4>
+        <DropdownButton
+          id="adult-dropdown-button"
+          title={selectedAdultValue || "Amount"}
+          onSelect={handleAdultSelect}
+          variant="warning"
+        >
+          {dropdownOptions}
+        </DropdownButton>
+      </div>
+    );
+  }
+
+
+  function SeniorDropdownButton() {
+    const handleSeniorSelect = (seniorEventKey) => {
+      const seniorTicketCount = parseInt(seniorEventKey, 10);
+      const prevSeniorTicketCount = parseInt(selectedSeniorValue, 10) || 0;
+      const prevSeniorContribution = seniorTicket * prevSeniorTicketCount;
+      const newSeniorContribution = seniorTicket * seniorTicketCount;
+      const newTotalPrice = totalPrice - prevSeniorContribution + newSeniorContribution;
+      setSelectedSeniorValue(seniorEventKey);
+      setTotalPrice(newTotalPrice);
+    };
+
+
+    const dropdownOptions = [];
+    for (let i = 1; i <= ticketTypeLength(); i++) {
+      dropdownOptions.push(
+        <Dropdown.Item key={i} eventKey={i.toString()}>
+          {i}
+        </Dropdown.Item>
+      );
+    }
+  
+    return (
+      <div>
+        <h4>Seniors</h4>
+      <DropdownButton
+        id="adult-dropdown"
+        className="dropdownButton"
+        title={selectedSeniorValue || "Amount"}
+        onSelect={handleSeniorSelect}
+        variant="warning"
+      >
+        {dropdownOptions}
+      </DropdownButton>
+      </div>
+    );
+  }
+
+  function ChildDropdownButton() {
+  
+    const handleChildSelect = (childEventKey) => {
+      const childTicketCount = parseInt(childEventKey, 10);
+      const prevChildTicketCount = parseInt(selectedChildValue, 10) || 0;
+      const prevChildContribution = childTicket * prevChildTicketCount;
+      const newChildContribution = childTicket * childTicketCount;
+      const newTotalPrice = totalPrice - prevChildContribution + newChildContribution;
+      setSelectedChildValue(childEventKey);
+      setTotalPrice(newTotalPrice);
+    };
+    
+
+
+    const dropdownOptions = [];
+    for (let i = 1; i <= ticketTypeLength(); i++) {
+      dropdownOptions.push(
+        <Dropdown.Item key={i} eventKey={i.toString()}>
+          {i}
+        </Dropdown.Item>
+      );
+    }
+  
+    return (
+      <div>
+        <h4>Children</h4>
+      <DropdownButton
+        id="adult-dropdown"
+        className="dropdownButton"
+        title={selectedChildValue || "Amount"}
+        onSelect={handleChildSelect}
+        variant="warning"
+      >
+        {dropdownOptions}
+      </DropdownButton>
+      </div>
+    );
+  }
 
   // Render seating chart here
   
-    return !a ?(s.seats.length === 0 ? null : (
+    return !receiptNotReady ?(s.seats.length === 0 ? null : (
       <div className="screening-and-seats">
         <h1>{s.screening.movie}</h1>
         <h2>
@@ -148,6 +315,13 @@ const DisplaySeats = () => {
         </div>
         <hr className="headlineLine" />
         <h2>Choose Ticket Types</h2>
+        <div className="ticket-dropdowns">
+        <ChildDropdownButton />
+        <AdultDropdownButton />
+        <SeniorDropdownButton />
+        </div>
+        <hr className="headlineLine" />
+        <h2>Total: {totalPrice} SEK</h2>
         <hr className="headlineLine" />
         <Button
           onClick= {handleCompleteOrder}
@@ -163,6 +337,7 @@ const DisplaySeats = () => {
         <Card className="cardLayout" border="dark" style={{ width: '30rem', textAlign:"left"}}>
         <Card.Body className="text-align-left">
         <Card.Title>Booking ID: {bookingNumber}</Card.Title>
+        <hr className="headlineCategory" />
         <Card.Title>Movie: {s.movie.title}</Card.Title>
         <Card.Title>Date&Time: {new Intl.DateTimeFormat('eng-SE', {
     weekday: 'long',
@@ -174,8 +349,13 @@ const DisplaySeats = () => {
   }).format(new Date(s.screening.screeningTime))}</Card.Title>
         <Card.Title>Auditorium: {s.screening.auditorium}</Card.Title>
         <Card.Title>Seats: {selectedSeats.map(seat => `Seat ${seat.seatNumber}, Row ${seat.rowNumber}`).join(" | ")}</Card.Title>
-        <Card.Title>Ticket Types: tjabbatjena</Card.Title>
-        <Card.Title>Total: tjabbatjena</Card.Title>
+        <hr className="headlineCategory" />
+        <Card.Title>Ticket Types:</Card.Title>
+        <Card.Title>Children: {selectedChildValue}x {childTicket} SEK</Card.Title>
+        <Card.Title>Adults: {selectedAdultValue}x {adultTicket} SEK</Card.Title>
+        <Card.Title>Seniors: {selectedSeniorValue}x {seniorTicket} SEK</Card.Title>
+        <hr className="headlineCategory" />
+        <Card.Title>Total: {totalPrice} SEK</Card.Title>
         </Card.Body>
         </Card>
         </div>)}
